@@ -1,15 +1,15 @@
-# Beginners’ guide to installing silver stripe on DigitalOcean
+# Beginners’ guide to installing Silverstripe CMS on DigitalOcean
 Helen Jones
 
 ## Introduction
 
 ### Caveat
-There are many different ways to set up a server. This guide shows one way to set up a digital ocean droplet server that will work for a Silverstripe project. You are advised to always ensure you are working with up to date versions of software to have the latest security updates.
+There are many different ways to set up a server. This guide shows one way to set up a digital ocean droplet server that will work for a Silverstripe CMS project. You are advised to always ensure you are working with up to date versions of software to have the latest security updates.
 
 The versions of software given in the guide were the latest versions available at the time it was written.
 
 ### How to use guide:
-This guide will walk you through setting up a digital ocean server with CentOS 7 operating system, PHP v 7.4 (including extensions required by Silverstripe), Apache v 2.4, and MariaDB v 10.6. If you already have a suitable server set up you can skip those parts and use only the part on installing and setting up Silverstripe.
+This guide will walk you through setting up a digital ocean server with CentOS 7 operating system, PHP v 7.4 (including extensions required by Silverstripe CMS), Apache v 2.4, and MariaDB v 10.6. If you already have a suitable server set up you can skip those parts and use only the part on installing and setting up Silverstripe CMS.
 
 XXX Things that need to be typed or will be seen as responses/outputs in terminal are shown on a grey background. Red font indicates things which need to be typed, black font indicates things that will be shown as an output/response/prompt. Some text files will need to be created or edited directly on the droplet/server. Nano is used as the text editor program on the server. Things to be typed in nano are shown as blue font on a grey background. Every time a file is created of edited in nano, you need to press `Ctrl+o` to save the file and then `Ctrl+x` to exit the nano program. Notes to clarify things in the terminal or nano sections are shown in green font.
 
@@ -17,7 +17,7 @@ For the purposes of this guide, the fictional person Katniss Everdeen is used as
 
 ## Brief guide for those who already know how to set up the droplet/server
 
-Create a new silver stripe project called website1 in the webserver folder:
+Create a new Silverstripe CMS project called website1 in the webserver folder:
 
 ```bash
 > cd /var/www/
@@ -26,11 +26,11 @@ Create a new silver stripe project called website1 in the webserver folder:
 
 The 2 warnings about depreciated packages can be ignored
 
-XXX Pro tip: if you want to install a specific version of silver stripe rather than the latest one available, XXX
+XXX Pro tip: if you want to install a specific version of Silverstripe CMS rather than the latest one available, XXX
 
 IMPORTANT: You will need to make sure there is an apache virtual host pointing to the public subfolder of the website1 folder that is created. See section 3.2 for details.
 
-You now need to modify some file and folder owners and permissions, particularly the selinux settings, to allow silver stripe to run.
+You now need to modify some file and folder owners and permissions, particularly the selinux settings, to allow Silverstripe CMS to run.
 
 ```bash
 > cd website1
@@ -41,7 +41,7 @@ You now need to modify some file and folder owners and permissions, particularly
 > sudo chown -R apache:silverstripe assets
 ```
 
-You also need to create a .env file containing settings for your silver stripe project
+You also need to create a .env file containing settings for your Silverstripe CMS project
 
 /var/www/website1/.env
 ```yaml
@@ -54,7 +54,7 @@ SS_DEFAULT_ADMIN_USERNAME=”katniss-default”
 SS_DEFAULT_ADMIN_PASSWORD=”password-cinna”
 SS_ENVIRONMENT_TYPE=”dev”
 ```
-The rest of the setup of the silver stripe project is done online. In chrome go to:
+The rest of the setup of the Silverstripe CMS project is done online. In chrome go to:
 
 [https://mywebsite.url/dev/build](https://mywebsite.url/dev/build)
 
@@ -200,7 +200,7 @@ gpgkey=https://yum.mariadb.org.RPM-GPG-KEY-MariaDB
 gpgcheck=1
 ```
 
-### 2. Install software required to run silver stripe
+### 2. Install software required to run Silverstripe CMS
 
 Most of the software will be installed using the in-built program yum from the various repositories installed in step 1.2. It’s a good idea to check the version that will be installed and where from first to ensure all the repo setups worked correctly.
 
@@ -260,7 +260,7 @@ Enter the edited code and then enter
 
 ### 3.  Setup software
   
-  PHP, Apache, and MariaDB all need to be setup ready to install silver stripe. Set up of git is also included here but if your working method will upload your custom code to the droplet/server in a different way then you can omit this step.
+  PHP, Apache, and MariaDB all need to be setup ready to install Silverstripe CMS. Set up of git is also included here but if your working method will upload your custom code to the droplet/server in a different way then you can omit this step.
 
 #### 3.1.  MariaDB
     
@@ -348,7 +348,7 @@ The easiest way to check if Apache is running correctly is to make a very simple
 
 Go to the server’s IP address in chrome to make sure you can see the page you just made.
 
-Next you need to set up an Apache virtual host that will allow the internet to connect to the silver stripe project you are going to create. You can make multiple virtual hosts (one per project) if you are going to use the droplet to create more than 1 silver stripe website.
+Next you need to set up an Apache virtual host that will allow the internet to connect to the Silverstripe CMS project you are going to create. You can make multiple virtual hosts (one per project) if you are going to use the droplet to create more than one Silverstripe CMS website.
 
 ```bash
 > sudo mkdir /var/www/website1
@@ -420,9 +420,9 @@ XXX
 
 #### 3. 4.  Git
 
-### 4.  Install silver stripe
+### 4.  Install Silverstripe CMS
 
-Create a new silver stripe project called website1 in the webserver folder:
+Create a new Silverstripe CMS project called website1 in the webserver folder:
 
 ```bash
 > cd /var/www/
@@ -430,11 +430,11 @@ Create a new silver stripe project called website1 in the webserver folder:
 ```
 
 The 2 warnings about depreciated packages can be ignored
-Pro tip: if you want to install a specific version of silver stripe rather than the latest one available, XXX
+Pro tip: if you want to install a specific version of Silverstripe CMS rather than the latest one available, XXX
 
 IMPORTANT: You will need to make sure there is an apache virtual host pointing to the public subfolder of the website1 folder that is created. See section 3.2 for details.
 
-You now need to modify some file and folder owners and permissions, particularly the selinux settings, to allow silver stripe to run.
+You now need to modify some file and folder owners and permissions, particularly the selinux settings, to allow Silverstripe CMS  to run.
 
 ```bash
 > cd website1
@@ -445,7 +445,7 @@ You now need to modify some file and folder owners and permissions, particularly
 > sudo chown -R apache:silverstripe assets
 ```
 
-You also need to create a .env file containing settings for your silver stripe project
+You also need to create a .env file containing settings for your Silverstripe CMS project
 
 
 ```bash
@@ -464,7 +464,7 @@ SS_DEFAULT_ADMIN_PASSWORD=”password-cinna”
 SS_ENVIRONMENT_TYPE=”dev”
 ```
 
-The rest of the setup of the silver stripe project is done online. In chrome go to:
+The rest of the setup of the Silverstripe CMS project is done online. In chrome go to:
 
 [https://mywebsite.url/dev/build](https://mywebsite.url/dev/build)
 
@@ -480,11 +480,11 @@ Click the link to log in to the CMS. You can now create a user account for yours
 
 ## Conclusion
 
-Congratulations on setting up your first silver stripe project!
+Congratulations on setting up your first Silverstripe CMS project!
 
 Where to next?
 
-You may want to read some of the beginners guides on this site, and do some of the lessons on the silver stripe website.
+You may want to read some of the beginners guides on this site, and do some of the lessons on the Silverstripe CMS website.
 
 We particularly recommend:
 
