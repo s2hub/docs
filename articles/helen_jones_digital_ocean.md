@@ -11,8 +11,6 @@ The versions of software given in the guide were the latest versions available a
 ### How to use guide:
 This guide will walk you through setting up a digital ocean server with CentOS 7 operating system, PHP v 7.4 (including extensions required by Silverstripe CMS), Apache v 2.4, and MariaDB v 10.6. If you already have a suitable server set up you can skip those parts and use only the part on installing and setting up Silverstripe CMS.
 
-XXX Things that need to be typed or will be seen as responses/outputs in terminal are shown on a grey background. Red font indicates things which need to be typed, black font indicates things that will be shown as an output/response/prompt. Some text files will need to be created or edited directly on the droplet/server. Nano is used as the text editor program on the server. Things to be typed in nano are shown as blue font on a grey background. Every time a file is created of edited in nano, you need to press `Ctrl+o` to save the file and then `Ctrl+x` to exit the nano program. Notes to clarify things in the terminal or nano sections are shown in green font.
-
 For the purposes of this guide, the fictional person Katniss Everdeen is used as the developer and she uses password-primrose, password-peeta, and password-cinna as passwords. You should use your own suitable usernames and secure passwords for all steps. Katniss’s website has the domain name mywebsite.url so you should replace this with your own domain name wherever this is used in the guide.
 
 ## Brief guide for those who already know how to set up the droplet/server
@@ -25,8 +23,6 @@ Create a new Silverstripe CMS project called website1 in the webserver folder:
 ```
 
 The 2 warnings about depreciated packages can be ignored
-
-XXX Pro tip: if you want to install a specific version of Silverstripe CMS rather than the latest one available, XXX
 
 IMPORTANT: You will need to make sure there is an apache virtual host pointing to the public subfolder of the website1 folder that is created. See section 3.2 for details.
 
@@ -81,10 +77,6 @@ Select initial setup as:
 Create an SSH key for the authentication. You need to create an SSH key using the specific computer you will be using to connect to the server.
 
 Caution: If you already use SSH key to connect to something else you need to take care not to overwrite the existing key.
-
-In terminal enter:
-XXX
-
 
 #### 1.1.  Log in to droplet and do initial setup
 Login to the droplet via the console on the website then find out the ECDSA key fingerprint:
@@ -411,14 +403,6 @@ The folder for the log files needs to be created, the 2 virtual hosts created ne
 > sudo ln -s //etc/httpd/sites-available/aaa-default.conf /etc/httpd/sites-enabled/aaa-default.conf
 > sudo systemctl restart httpd.service
 ```
-  
-
-#### 3.3.  PHP
-    
-The memory thingy that Tim and nightjarnz helped me sort out on slack (and I already forgot what it was – oops!)
-XXX
-
-#### 3. 4.  Git
 
 ### 4.  Install Silverstripe CMS
 
@@ -429,8 +413,7 @@ Create a new Silverstripe CMS project called website1 in the webserver folder:
 > composer create-project silverstripe/installer website1
 ```
 
-The 2 warnings about depreciated packages can be ignored
-Pro tip: if you want to install a specific version of Silverstripe CMS rather than the latest one available, XXX
+Warnings about depreciated packages can be ignored
 
 IMPORTANT: You will need to make sure there is an apache virtual host pointing to the public subfolder of the website1 folder that is created. See section 3.2 for details.
 
@@ -480,16 +463,4 @@ Click the link to log in to the CMS. You can now create a user account for yours
 
 ## Conclusion
 
-Congratulations on setting up your first Silverstripe CMS project!
-
-Where to next?
-
-You may want to read some of the beginners guides on this site, and do some of the lessons on the Silverstripe CMS website.
-
-We particularly recommend:
-
-XXX …..some specific guides
-
-XXX …..the specific basic lessons in the series on silver stripe website
-
-Once you have played around with your silver stripe project and are ready to create a real website you will definitely want to look into setting up your project to work on https once you have set up your SSL certificate on your server. XXX.... other things that should be done for real websites...
+Congratulations on setting up your first Silverstripe CMS project on Digital Ocean!
