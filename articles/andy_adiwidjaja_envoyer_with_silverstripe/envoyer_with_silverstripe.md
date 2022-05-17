@@ -1,6 +1,6 @@
-# Using Envoyer with Silverstripe CMS
+ # Using Envoyer with Silverstripe CMS
 
-## Introduction
+![](00_title.jpg)
 
 Depending on the project, deployment can be a very complex problem. But in 80% of Silverstripe CMS projects, the steps are always the same:
 
@@ -10,6 +10,9 @@ Depending on the project, deployment can be a very complex problem. But in 80% o
 - Build the frontend
 
 Even if the deployment is simple, deployment automation makes sense. It accelerates the process and reduces sources of errors. Often, deployments are nearly the same but there are small differences. You will get back the time you need to setup the deployment after few repetitions. A big advantage in our company is that any member of the team can deploy: They just merge into the deployment branch and it will deploy on the server. In bigger projects we have multiple deployed branches - the main branch will deploy on the live URL and a staging branch will deploy on a preview URL.
+
+![Screen 1: Project overview](00_overview.png)
+
 
 There are various possibilities for deployment automation. [Envoyer](https://envoyer.io/) is originally a Laravel product, but it can be used to deploy any PHP project. In our company, we are using it because it is easy to use and reasonably priced, especially if you have many projects. 
 One limitiation is limited team management. You can share projects with other Envoyer users, but only single projects. That makes it difficult to share all projects with a new team member.
@@ -45,7 +48,7 @@ The Silverstripe CMS .env file we put into the releases folder. Envoyer also pro
 
 ### Create project
 
-![Screen 1: Create Project](01_create_project.png)
+![Screen 2: Create Project](01_create_project.png)
 
 To add a new project, you first have to provide the repository informations and the branch you want to deploy. Select "Other" as the project type, otherwise Envoyer will try to use artisan commands.
 
@@ -59,13 +62,13 @@ https://github.com/settings/connections/applications/94f9ec2a8d84cbc725e2
 
 After creating the project, you have to make some project settings.
 
-![](02_project_settings.png)
+![Screen 3: Project settings](02_project_settings.png)
 
 In "The Basics", you can set a "Health Check URL". This is an URL Envoyer will check after the deployment. 
 
 The "Deployments to Retain" are the number of deployments Envoyer will keep so that you can return to this state fast. Beware that they will occupy disk space on the server. And of course there are no backwards migrations in Silverstripe so a rollback is never complete.
 
-![](03_project_settings_2.png)
+![Screen 4: Project settings](03_project_settings_2.png)
 
 In "Source Control", you have to check the checkbox "Deploy When Code is Pushed". With this option, the deployment is run when the given branch is updated, which is what we want.
 
@@ -82,7 +85,7 @@ Now you have the project overview with these tabs:
 
 ### Server settings
 
-![](04_server_settings.png)
+![Screen 5: Server settings](04_server_settings.png)
 
 Now you can configure your server(s). Most important are the (ssh) user and project path. On our servers, "Reload FPM" will not work the way Envoyer tries to do it, so we configure a hook for it.
 
@@ -96,7 +99,7 @@ On the tab "Deployment hooks" you can add everything that should happen after be
 
 Before configuring the hooks, we define "linked folders". These are folders which are shared between deployments. The most important one is `assets`, but we also often link `node_modules` (to speed up the frontend build). To keep `silverstripe-cache` is not a good idea, we tried that. The folder you are linking has to already exist in the project folder.
 
-![](05_linked_folders.png)
+![Screen 6: Linked folders](05_linked_folders.png)
 
 ### Deployment hooks
 
@@ -120,7 +123,7 @@ code on the server and use these steps:
 
 The configuration of a hook is straightforward: Just write a script - everything is possible. You have to select your server(s) on the bottom of the form.
 
-![](06_hook_settings.png)
+![Screen 3: Hook settings](06_hook_settings.png)
 
 This is our standard dev/build-Hook: We set the PHP-Version, switch to the release directory and run dev/build. You have to select your server definition on the bottom, this allows for different hooks on multi-server deployments.
 
@@ -129,3 +132,5 @@ You can reuse hooks in other projects by copying the hooks.
 ## Conclusion
 
 Now you just have to click "Deploy", future commits will trigger deployments automatically. This guide just covers the basics, very interesting are the integrations for notifications.
+
+Thanks for reading! [You find me on Slack](https://silverstripe-users.slack.com/team/U70BLUNSU).
