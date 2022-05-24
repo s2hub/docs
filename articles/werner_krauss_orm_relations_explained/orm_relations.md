@@ -6,8 +6,8 @@ Life is full of relations. We're born as siblings of our parents, have friends a
 business partners or the loved one we marry.
 And there are that technical relations between different sets of informations we store in our database. Member records,
 image galleries, customer data, shop orders, etc. One thing I really love about Silverstripe is, that it helps me to
-model these relations with its very good ORM. The framework helps me to concentrate on the objects I want to model and
-does everything needed in the database. Creating tables, adding fields and indexes, querying for results etc...
+model these relations with its very good ORM. I can concentrate on the objects I want to model and the framework
+does everything needed in the database: creating tables, adding fields and indexes, querying for results etc...
 
 Of course, you should know how databases work to understand what's going on under the hood when you use tools that help
 you with the model. For me it's good that I don't have to deal with that all the time. This way I can concentrate on the
@@ -32,7 +32,10 @@ How does your database save that relation? It uses a so called "foreign key" to 
 key" of the related record. In Silverstripe that primary key is the `ID` field of our DataObject. In plain SQL it could
 be any unique field.
 
-** TODO: example tables **
+| ID | Created | Title |
+----| --- | --- | 
+| 1 | 2022-05-22 | This is a test |
+| 2 | 2022-05-25 | Another brick in the wall |
 
 Silverstripe's ORM handles the relation for you and adds the relevant field and index to the database automatically. All
 you have to do is defining the relation you want. Let's start with an example:
@@ -44,12 +47,16 @@ that user in a seperate table to keep the tables smaller.
 We need to store e.g. Country, the GitHub username and other information. The table should look like this:
 
 |ID | Created | LastEdited | Country | GHUserName | Comment |
+----| --- | --- |----| --- | --- | 
+42 | 2022-05-15  | 2022-05-16 | AT | wmk | loves clean code |
+43 | 2022-05-22 | 2022-05-22 | UK | xyz | is anonymous |
 
 Let's add this table to the database. In Silverstripe all you need to do is creating a DataObject:
 
 ```php
-use DataObject;
-use Member; //@todo: correct Namespaces
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Member; 
+
 class S2HubDocs\Model\MemberData extends DataObject;
 {
     private static $table_name = 'MemberData';
@@ -71,7 +78,7 @@ Silverstripe's `Member` class, as we should not edit 3rd party classes directly:
 
 ```php
 use S2HubDocs\Model\MemberData;
-use DataObject; //@todo: correct namespace
+use SilverStripe\ORM\DataObject; 
 
 class S2HubDocs\Extension\Member extends DataExtension
 {
@@ -80,8 +87,6 @@ class S2HubDocs\Extension\Member extends DataExtension
     ];
 }
 ```
-
-//TODO: verify index on relations.
 
 With the `$has_one` config array you can define, which foreign keys to other tables should be saved in your model's
 table. It generates an integer column suffixed with "ID", so our relation name "ExtraMemberData" will create the field "
@@ -118,6 +123,14 @@ can use ORM's relation methods to get the related DataObject from both direction
 After running `dev/build/?flush` we can see, that the `Member` table has a new database field "ExtraMemberDataID" that
 can hold the foreign key to the related table.
 
+Our Member table now looks like:
+
+| ID | FirstName | Surname | Email | ExtraMemberDataID |
+--- | --- | --- | --- | --- | 
+|123 | Werner | Krauß | werner.krauss@s2-hub.com | 42
+
+Note, that the Member's ID and the ExtraMemberDataId don't need to be the same number. Each relation is numbered independently.
+
 In our code we can now use magic getter methods named like our relation name; This getter method returns the
 corresponding `DataObject`. In our example you can use it like:
 
@@ -144,7 +157,8 @@ It's also possible to add relations to the same object. Let's create a `Person` 
 persons:
 
 ```php
-use DataObject; //@todo: correct namespaces
+use SilverStripe\ORM\DataObject;
+
 class Person extends DataObject
 {
     private static $table_name = 'Person';
@@ -188,13 +202,20 @@ $johnIsMarriedTo = $john->MarriedTo()->FirstName;
 $maryIsMarriedTo = $mary->IsMarriedTo()->FirstName;
 ```
 
-#### Excursus: edit has one module (ex simon welsh)
+Our Person table now looks like this:
 
-    TODO: write about has_one_edit module
+| ID  | FirstName | Surname | Birthday | MariedToID |
+|-----| --- | --- | --- | --- |
+| 1 | John | Doe | 1999-01-01 | 2 |
+| 2 | Mary  | Doe | 2000-02-02 | | 
+
+
+> Tip: if you want to inline your 1:1 relation's fields you can use a module called [Has One Edit](https://packagist.org/packages/stevie-mayhew/hasoneedit). It handles saving into the has_one relation for you automatically. 
+> This way the data in your user interface feels like one model, though it's saved over two or more tables. 
 
 ## One to Many: Hierarchy, trees and taxonomies
 
-While the 1:1 relation is neat, you cannot model everything with it. In fact it's very limited. What if you want an
+While the 1:1 relation is neat, you cannot model everything with it. In fact, it's very limited. What if you want an
 image gallery with albums? Then one album has more than one image. This is where the 1:n (one to many) relation comes
 in.
 
@@ -205,7 +226,9 @@ album can have many images and each image is attached to exactly one album. If y
 albums, wait a bit until we discuss many-to-many relations.
 
 ```php
-//@todo: namespaces...
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Assets\Image;
+
 class S2HubDocs\Model\Album extends DataObject
 {
     private static $table_name = 'Album';
@@ -228,7 +251,7 @@ Image:
     Album: S2HubDocs\Model\Album
 ```
 
-After running `dev/build/?flush` we have a new table "Album" and Image has a new column called "AlbumID". We can get all
+After running `dev/build/?flush` we have a new table "Album" and Image has a new column for the foreign key, called "AlbumID". We can get all
 images of an album by calling the magic getter method, which returns a HasManyList, a subclass of DataList with some
 extra methods for managing 1:n relations.
 
@@ -250,6 +273,8 @@ each adult can have 0, 1 or many children. This way we can model hierarchy trees
 Let's modify the `Person` model from the 1:1 example:
 
 ```php
+use SilverStripe\ORM\DataObject;
+
 class Person extends DataObject 
 {
     ...
@@ -265,10 +290,7 @@ class Person extends DataObject
 }
 ```
 
-Note, that we have a 1:n relation to the same DataObject, therefor we have to use named relations (see Documentation)
-
-//TODO: link to Documentation
-//todo: example data table
+Note, that we have a 1:n relation to the same DataObject, therefor we have to use named relations (see [Documentation](https://docs.silverstripe.org/en/4/developer_guides/model/relations/))
 
 ### Adding objects to RelationLists
 
@@ -280,9 +302,7 @@ $juli = Person::get()->byID(11);
 $john->Children()->add($juli); 
 ```
 
-The `->add()` method takes a DataObject, adds the foreign key for us and saves it in one take. I think, the code of that is pretty elegant...
-
-//TODO: link to code of add method
+The [`->add()` method](https://api.silverstripe.org/4/SilverStripe/ORM/HasManyList.html#method_add) takes a DataObject, adds the foreign key for us and saves it in one take. I think, the code of that is pretty elegant...
 
 The more verbose version of the code above would be:
 
@@ -291,8 +311,22 @@ $juli = Person::get()->byID(11);
 $juli->ParentID = $john->ID;
 $july->write();
 ```
+Our table now looks like this:
 
-    @todo: more handy methods like removing an item from a list, etc..?
+| ID  | FirstName | Surname | Birthday | MariedToID | ParentID |
+|-----| --- | --- | --- | --- | --- |
+| 1   | John | Doe | 1999-01-01 | 2 | |
+| 2   | Mary  | Doe | 2000-02-02 | | |
+| 11  | Juli | Doe | 2010-10-10 | | 1| 
+
+
+In case you want to remove an item from a list, you can use the `->remove()` method. Be careful, this might delete the dataset from your database, depending if you're on a plain `DataList` or a `RelationList`, where it removes the relation between the records.
+
+```php
+//I cannot imagine why someone would like to remove a child;
+//must have been a wrong relation in first place.
+$john->Children()->remove($juli); 
+```
 
 #### excourse: hierarchy extension
 
@@ -308,9 +342,6 @@ The most obvious example of the `Hierarchy` extension is SiteTree.
 The m:n relation (many to many) is the only relation that cannot be directly established between two database tables. We
 need an extra mapping table in the middle that resolves the m:n relation into two 1:n relations and holds the foreign keys of both sides.
 Luckily Silverstripe does that for you and you don't have to think about that when modelling the database.
-
-* Returns ManyManyList
-* $manymany / $belongs_manymany
 
 ### classic relation
 
@@ -343,6 +374,17 @@ class Tag extends DataObject
 ```
 
 > A common convention in Silverstripe is, to name `$has_many`, `$many_many` and `$belongs_many_many` relations in plural. This ensures that the code is more readable. The relation holding all tags is named "Tags" and the corresponding DataObject is named in singular "Tag", as each object only holds one specific tag.
+
+The code above will create a mapping table called "BlogPost_Tags", the combined name of the m and the n side of the m:n relation. It holds an ID (for convenience) and both foreign keys for BlogPosts and Tags:
+
+ID | BlogPostID | TagID |
+--- |--- |--- | 
+1 | 123  |4 |
+2 | 123 | 12 |
+3 | 144 | 4 |
+4 | 128 | 12 |
+
+Any given combination between BlogPost and Tag is possible with a many-many relation.
 
 As with the 1:n example above, we can access the relation with the ORM's magic methods:
 
@@ -404,7 +446,14 @@ $john->Hobbies()->add($running, ['Weight' => 75]);
 $mary->Hobbies()->add($running, ['Weight' => 85]);
 ```
 
-TOOD: show database tables after that code
+Our Person_Hobbies mapping table now looks like this:
+
+ID | PersonID | HobbyID | Weight |
+--- |--- |--- |--- |
+1  | 1 | 6 | 100 |
+2 | 1 | 21 | 75 |
+3  | 2 | 21 | 85 | 
+
 
 ### manymany through
 
@@ -448,13 +497,15 @@ class Person extends DataObject
 }
 ```
 
-On `Hobby`, `$belongs_many_many` stays the same. We still get a `ManyManyList` and adding or removing relations from Person to Hobby (or vice versa) is the same like above.
+On `Hobby`, `$belongs_many_many` stays the same. We still get a `ManyManyList` and adding or removing relations from Person to Hobby (or vice versa) is the same as above.
 
 ## Conclusion
 
 One of Silverstripe's key features is, that you can model your data structure in PHP classes and all database tables are created automatically by running `dev/build/?flush`. This helps you to get your work done faster. It's good to know how the relations work in the database, but it's less error-prone if I don't have to create or migrate the tables myself.
 
 While Silverstripe updates your tables automatically, there is no ready-to-use system for handling migrations or downgrades. Silverstripe doesn't delete columns you don't need any more, because it doesn't know if you still need the data or if it should get rid of it. This isn't a problem for me. I tend to write migration documentation with SQL statements I can run manually.
+
+What's next? Silverstripe's backend offers e.g. `ModelAdmin` for managing your models and `GridField` for managing relations. But that's content for a different tutorial...
 
 ## Sources:
 
