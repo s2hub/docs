@@ -129,7 +129,7 @@ Our Member table now looks like:
 --- | --- | --- | --- | --- | 
 |123 | Werner | Krauß | werner.krauss@s2-hub.com | 42
 
-Note, that the Member's ID and the ExtraMemberDataId don't need to be the same number. Each relation is numbered independently.
+Note, that the Member's ID and the ExtraMemberDataID don't need to be the same number. Each relation is numbered independently.
 
 In our code we can now use magic getter methods named like our relation name; This getter method returns the
 corresponding `DataObject`. In our example you can use it like:
