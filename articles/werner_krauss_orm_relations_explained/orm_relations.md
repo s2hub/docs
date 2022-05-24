@@ -40,7 +40,7 @@ be any unique field.
 Silverstripe's ORM handles the relation for you and adds the relevant field and index to the database automatically. All
 you have to do is defining the relation you want. Let's start with an example:
 
-### example: extra data in other DO to keep main table smaller
+### Example: extra data in other DataObjects to keep main table smaller
 
 Let's say users can log in to your site using OAuth (e.g. login with GitHub) and you want to store some extra data about
 that user in a seperate table to keep the tables smaller.
@@ -151,7 +151,7 @@ $memberData = MemberData::get()->byID(42);
 echo $memberData->Member()->FirstName; // show the FirstName field of the related Member 
 ```
 
-### example: marriage: 1:1 between person objects
+### Example: Marriage: 1:1 between person objects
 
 It's also possible to add relations to the same object. Let's create a `Person` Model and create relations between
 persons:
@@ -177,7 +177,8 @@ class Person extends DataObject
         'IsMarriedTo' => Person::class,
     ];
     
-    public function getIsMarried {
+    public function getIsMarried(): bool
+    {
         return $this->MarriedTo()->exists() || $this->IsMarriedTo()->exists;
     }
 
@@ -209,6 +210,7 @@ Our Person table now looks like this:
 | 1 | John | Doe | 1999-01-01 | 2 |
 | 2 | Mary  | Doe | 2000-02-02 | | 
 
+> Note: a 1:1 relation to the same object needs more logic to be bullet proof. In the example above nothing holds us from setting Mary's `MarriedToID` to someone else's ID. This can be handled e.g. in `onAfterWrite()` and `delete()` when a record is removed.
 
 > Tip: if you want to inline your 1:1 relation's fields you can use a module called [Has One Edit](https://packagist.org/packages/stevie-mayhew/hasoneedit). It handles saving into the has_one relation for you automatically. 
 > This way the data in your user interface feels like one model, though it's saved over two or more tables. 
@@ -219,7 +221,7 @@ While the 1:1 relation is neat, you cannot model everything with it. In fact, it
 image gallery with albums? Then one album has more than one image. This is where the 1:n (one to many) relation comes
 in.
 
-### example: simple image gallery
+### Example: a very simple image gallery
 
 1:n uses `$has_many` on the "1" side (our album) and `$has_one` on the "many" side (the images). This means that an
 album can have many images and each image is attached to exactly one album. If you want your images been shown in more
@@ -266,7 +268,7 @@ $album = $Image->Album(); //get the album of an image
 In the example above, `$myAlbum->Images()` returns a `HasManyList`, which is a subclass of `RelationList` and `DataList`
 . Those lists are used to handle relation specific tasks like adding or removing objects from a relation (see below).
 
-### example: parent/child relation
+### Example: parent/child relation
 
 Another example for a typical 1:n relation is the parent child relation. A child has exactly one mother or father, but
 each adult can have 0, 1 or many children. This way we can model hierarchy trees by objects relating to each other.
@@ -328,7 +330,7 @@ In case you want to remove an item from a list, you can use the `->remove()` met
 $john->Children()->remove($juli); 
 ```
 
-#### excourse: hierarchy extension
+#### Excourse: Hierarchy extension
 
 Modelling tree-like data is pretty common, and Silverstripe offers a handy tool so you don't have to reinvent the wheel
 all the time:
@@ -343,7 +345,7 @@ The m:n relation (many to many) is the only relation that cannot be directly est
 need an extra mapping table in the middle that resolves the m:n relation into two 1:n relations and holds the foreign keys of both sides.
 Luckily Silverstripe does that for you and you don't have to think about that when modelling the database.
 
-### classic relation
+### Classic relation
 
 All you need is to define `$many_many` and `$belongs_many_many` on both ends of the relation. If you have e.g. blog
 posts you want to be tagged, each blog post can have many tags, and each tag can have many blog posts. A typical use
@@ -455,7 +457,7 @@ ID | PersonID | HobbyID | Weight |
 3  | 2 | 21 | 85 | 
 
 
-### manymany through
+### Silverstripe 4: manymany through
 
 If you need extra logic in the mapping table, e.g. some `onBeforeWrite()` magic or extensions like Fluent or Versioning, you can define a specific `DataObject` for mapping in `$many_many_through`.  Our person - hobbies relation could look like this:
 
