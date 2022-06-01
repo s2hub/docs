@@ -305,8 +305,8 @@ While you can save the foreign key manually to your DataObject on the "N" side o
 RelationList (e.g. HasManyList or ManyManyList), which has a handy way to add objects to an existing relation:
 
 ```php
-$juli = Person::get()->byID(11);
-$john->Children()->add($juli); 
+$sarah = Person::get()->byID(11);
+$john->Children()->add($sarah); 
 ```
 
 The [`->add()` method](https://api.silverstripe.org/4/SilverStripe/ORM/HasManyList.html#method_add) takes a DataObject, adds the foreign key for us and saves it in one take. I think, the code of that is pretty elegant...
@@ -314,17 +314,18 @@ The [`->add()` method](https://api.silverstripe.org/4/SilverStripe/ORM/HasManyLi
 The more verbose version of the code above would be:
 
 ```php
-$juli = Person::get()->byID(11);
-$juli->ParentID = $john->ID;
-$juli->write();
+$sarah = Person::get()->byID(11);
+$sarah->ParentID = $john->ID;
+$sarah->write();
 ```
 Our table now looks like this:
 
 | ID  | FirstName | Surname | Birthday | MariedToID | ParentID |
-|-----| --- | --- | --- | --- | --- |
-| 1   | John | Doe | 1999-01-01 | 2 | |
-| 2   | Mary  | Doe | 2000-02-02 | | |
-| 11  | Juli | Doe | 2010-10-10 | | 1| 
+|-----|-----------| --- | --- | --- | --- |
+| 1   | John      | Doe | 1999-01-01 | 2 | |
+| 2   | Mary      | Doe | 2000-02-02 | | |
+| 2   | Mary      | Doe | 2000-02-02 | | |
+| 11  | Sarah     | Doe | 2010-10-10 | | 1| 
 
 
 In case you want to remove an item from a list, you can use the `->remove()` method. Be careful, this might delete the dataset from your database, depending if you're using a plain `DataList` (`Person::get()->filter('ParentID', $john->ID)`) or a `RelationList` (`$john->Children()`), where it removes the relationship between the records instead.
@@ -332,8 +333,8 @@ In case you want to remove an item from a list, you can use the `->remove()` met
 ```php
 //I cannot imagine why someone would like to remove a child;
 //must have been a wrong relation in first place.
-$john->Children()->remove($juli);
-// Juli still exists in our database, but no longer has John as a parent
+$john->Children()->remove($sara);
+// Sarah still exists in our database, but no longer has John as a parent
 ```
 
 #### Excourse: Hierarchy extension
