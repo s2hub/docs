@@ -389,6 +389,7 @@ class Tag extends DataObject
     ];
 }
 ```
+
 <aside class="tip">
 
 A common convention in Silverstripe CMS development is to name `$has_many`, `$many_many` and `$belongs_many_many` relations in plural. This ensures that the code is more readable. The relation holding many tags is named "Tags" and the corresponding DataObject is named in singular "Tag", as each object only holds data for one specific tag.
