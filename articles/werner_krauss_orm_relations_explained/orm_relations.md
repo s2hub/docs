@@ -213,12 +213,15 @@ Our Person table now looks like this:
 | 1 | John | Doe | 1999-01-01 | 2 |
 | 2 | Mary  | Doe | 2000-02-02 | | 
 
-> Note: a 1:1 relation to the same object needs more logic to be bullet proof. In the example above nothing holds us from setting Mary's `MarriedToID` to someone else's ID. This can be handled e.g. in `onAfterWrite()` and `delete()` when a record is removed.
+<aside class="note">
+Note: a 1:1 relation to the same object needs more logic to be bullet proof. In the example above nothing holds us from setting Mary's `MarriedToID` to someone else's ID. This can be handled e.g. in `onAfterWrite()` and `delete()` when a record is removed.
+</aside>
+<aside class="tip">
+Tip: if you want to inline your 1:1 relation's fields you can use a module called [Has One Edit](https://packagist.org/packages/stevie-mayhew/hasoneedit). It handles saving into the has_one relation for you automatically. 
+This way the data in your user interface feels like one model, though it's saved over two or more tables.
 
-> Tip: if you want to inline your 1:1 relation's fields you can use a module called [Has One Edit](https://packagist.org/packages/stevie-mayhew/hasoneedit). It handles saving into the has_one relation for you automatically. 
-> This way the data in your user interface feels like one model, though it's saved over two or more tables.
-> 
-> Since Silverstripe CMS [4.9](https://docs.silverstripe.org/en/4/changelogs/4.9.0/#other-new-features) is is possible to name form fields with dot notation to achieve this without a module. E.g. `\SilverStripe\Forms\TextField::create('ExtraMemberData.GHUserName', 'GitHub user name')`
+Since Silverstripe CMS [4.9](https://docs.silverstripe.org/en/4/changelogs/4.9.0/#other-new-features) is is possible to name form fields with dot notation to achieve this without a module. E.g. `\SilverStripe\Forms\TextField::create('ExtraMemberData.GHUserName', 'GitHub user name')`
+</aside>
 
 ## One to Many: Hierarchy, trees and taxonomies
 
@@ -381,8 +384,9 @@ class Tag extends DataObject
     ];
 }
 ```
-
-> A common convention in Silverstripe CMS development is to name `$has_many`, `$many_many` and `$belongs_many_many` relations in plural. This ensures that the code is more readable. The relation holding many tags is named "Tags" and the corresponding DataObject is named in singular "Tag", as each object only holds data for one specific tag.
+<aside class="tip">
+A common convention in Silverstripe CMS development is to name `$has_many`, `$many_many` and `$belongs_many_many` relations in plural. This ensures that the code is more readable. The relation holding many tags is named "Tags" and the corresponding DataObject is named in singular "Tag", as each object only holds data for one specific tag.
+</aside>
 
 The code above will create a mapping table called "BlogPost_Tags", the combined name of the M and the N side of the M:N relation. It holds an ID (for convenience) and both foreign keys for BlogPosts and Tags:
 
