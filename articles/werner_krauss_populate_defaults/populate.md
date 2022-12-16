@@ -72,7 +72,7 @@ TractorCow\Fluent\Model\Locale:
 
 ## Using silverstripe-populate and fluent together
 
-Of course, you can also use silverstripe-populate to define the project's locales if you need to create. In this case your fixtures need also to fill all the `Foo_Localised` tables:
+Of course, you can also use silverstripe-populate to define the project's locales if you need to create. In this case your fixtures need also to fill all the `Foo_Localised` tables with the translations. There is no need to add the default locale to the localisation table, as they're added when the record is created before.:
 
 ```yaml
 TractorCow\Fluent\Model\Locale:
@@ -92,13 +92,9 @@ Page:
     URLSegment: about-us
 
 SiteTree_Localised:
-  about_de:
-    RecordID: =>Page.about
-    Title: Über uns
-    URLSegment: ueber-uns
   about_en:
     RecordID: =>Page.about
+    Locale: en_GB
     Title: About us
     URLSegment: about-us
 ```
-
