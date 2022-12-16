@@ -37,7 +37,7 @@ Yes, but you have to install a module [4] [5] to start the server:
 
 ```sh
 $ cd my-project
-$ composer require pstaender/silverstripe-serve
+$ composer require --dev pstaender/silverstripe-serve
 ```
 
 Now you can start the Silverstripe project with:
