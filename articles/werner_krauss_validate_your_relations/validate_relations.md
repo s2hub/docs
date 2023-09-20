@@ -24,9 +24,9 @@ Sometimes, Silverstripe expects you to write `ClassName.RelationName`. to fully 
 
 The back relations of a `has_many` is a `has_one`. And if, for some reason, the other class has two `has_one`s to the original class, we all get confused, not only Silverstripe`s ORM.
 
-## `RelationValidationService`s Configuration
+## RelationValidationService's Configuration
 
-In order to switch on `RelationValidationService` on every dev/build, you need to configure the namespaces of the `DataObject`s you want to be validated and you need to enable output by default.
+In order to switch on `RelationValidationService` on every dev/build, you need to configure the namespaces of the `DataObject`s you want to be validated, and you need to enable output by default.
 
 ```yaml
 SilverStripe\Dev\Validation\RelationValidationService:
