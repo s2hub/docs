@@ -29,6 +29,11 @@ The back relations of a `has_many` is a `has_one`. And if, for some reason, the 
 In order to switch on `RelationValidationService` on every dev/build, you need to configure the namespaces of the `DataObject`s you want to be validated, and you need to enable output by default.
 
 ```yaml
+---
+Only:
+  environment: 'dev'
+---
+
 SilverStripe\Dev\Validation\RelationValidationService:
   output_enabled: true
   allow_rules:
@@ -63,3 +68,5 @@ SilverStripe\Assets\Image:
 ```
 
 I think this tool should be switched on by default in dev environments. In an ideal world you hook it to your unit tests to get warnings as soon as possible.
+
+[More information about RelationValidationService ](https://docs.silverstripe.org/en/5/developer_guides/model/relations/#validating-relations), e.g. how it can be included in unit tests, can be found in the documentation.
