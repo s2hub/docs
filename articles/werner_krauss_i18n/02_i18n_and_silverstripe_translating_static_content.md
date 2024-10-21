@@ -1,15 +1,15 @@
 # How to create multilingual sites in Silverstripe CMS
 Part 2 - i18n and Silverstripe CMS
 
-In the first part of this series we defined what i18n is and what parts of a software are affected by i18n. Today we will have a look at how Silverstripe CMS can help you with i18n and how you can translate static content in your webapp.
+In the first part of this series we defined what i18n is and what parts of a software project are affected by i18n. Today we will have a look at how Silverstripe CMS can help you with i18n and how you can translate static content in your webapp.
 
 ## i18n and Silverstripe CMS
 
-How can Silverstripe help you with i18n, which tools can you use for making webapps for the international market?
+How can Silverstripe help you with i18n and which tools can you use for making webapps for the international market?
 
-The core class for internationalisation is called - you guessed it -  `i18n`. That's where all logic for static translation in code and templates live, the methods `_t()` in PHP and `<%t` for templates.
+The core class for internationalisation is called - you guessed it -  `i18n`. That's where all logic for static translation in code and templates live.  The key methods are `_t()` in PHP and `<%t` for templates.
 
-It's called _static translation_, cause the translation is stored in code (your verson control system) and config variables and cannot be changed by editors. 
+It's called _static translation_, because the translation is stored in code (your version control system) and config variables and cannot be changed by editors. 
 That means, static translation is mainly affecting the user interface (e.g. texts like: 1 product added to the cart, contact me now, you are here...)
 
 If you want to translate CMS content stored in your database, then a module called Fluent is your friend. Here you can define multiple locales and change the content for each locale in the CMS. That's called dynamic translation and will be part of the next article in this series. First things first...
