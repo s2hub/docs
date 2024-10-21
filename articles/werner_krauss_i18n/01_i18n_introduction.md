@@ -6,25 +6,26 @@ In Europe, we have many countries with different languages spoken. If you want t
 
 
 ## What does i18n mean?
-I18n is the abbreviation of "internationalisation". That word has 20 characters in total, so we take the first and last character and the left 18 characters "nternationalisatio" is shortened to 18. Voila, i18n is born. Developers sometimes have a strange sense of humour, don't they?
+I18n is the abbreviation of "internationalisation". That word has 20 characters in total, so we take the first and last character and the remaining 18 characters "nternationalisatio" is shortened to 18. Voilà! i18n is born. Developers sometimes have a strange sense of humour, don't they?
 
-It actually means that you can design a software, that can be adapted to various languages and regions without changing the code.
+In practical terms, it means that you can design software that can be adapted to various languages and regions without changing the code.
 
-Another abbreviation is L10n, which stands for "localisation". That's the process to add new languages to the software
+Another related abbreviation is L10n, which stands for "localisation" - which is the process of adding new languages to the software.
 
 ## Language versus Locale:
 
 While language and locale are often used interchangeably, they are not the same. 
-A language can be spoken in many countries or regions. For German language there are at least three locales. For Germany, Austria and Switzerland the locales are `de_DE`, `de_AT` and `de_CH`. One famous difference between `de_DE` and `de_AT` is e.g. the name of the first month of the year, Januar in Germany and Jänner in Austria.
+A language can be spoken in many countries or regions. For the German language there are at least three locales. For Germany, Austria and Switzerland the locales are `de_DE`, `de_AT` and `de_CH`. One famous difference between `de_DE` and `de_AT` is e.g. the name of the first month of the year, Januar in Germany and Jänner in Austria.
 
-Tip: If your website is in English, but for international guests, not especially for British or American people, there is even a locale for "international Englishj", en_100.
+Tip: If your website is in English, but for international guests, (not specifically for British or American people), there is even a locale for "international English" - en_100.
+
 You can find more about [i18n and l10n on wikipedia](https://en.wikipedia.org/wiki/Internationalization_and_localization).
 
-## What parts are affected by i18n?
+## What is affected by i18n?
 
-The most obvious part that's different in various locales is content. That can be text, the main content but also text on buttons, form labels, even invisible text in metadata. You also have to think about the right character set, which is nowadays most of the time utf-8. Some languages like Arabic are written right-to-left, so you might have to keep this in mind.
+The most obvious part that's different in the various locales is content. That can be text in the main content but also text on buttons, form labels, even invisible text in metadata. You also have to think about using the right character set, which, nowadays, is commonly utf-8. Some languages like Arabic are written right-to-left, so you might have to keep this in mind during your build.
 
-For texts in your UI there might be different pluralisation rules, not just simply adding a "s" to the word like in English. But also different formats for:
+For text in your UI there might be different pluralisation rules beyond just simply adding a "s" to the word like in English. But also different formats for:
 
 * date and time
 * calendar systems
@@ -41,10 +42,10 @@ You see, there can be many things to think about when you're planning to create 
 ## How to make software multilingual
 The process of making software multilingual is pretty standardised.
 
-First, we need to modify our software that it can translate content. That's basically  i18n. There are different ways to make this, but everytime we end up having a function like `translateText($key, $locale)`, which translates the desired text into the given locale. Then it doesn't matter for us where the translations are actually stored.
+First, we need to modify our software so that it can translate content. That's basically i18n. There are different ways to achieve this, but generally we end up having a function like `translateText($key, $locale)`, which translates the desired text into the given locale. The way the translations are actually stored can be determined on a per-application basis.
 
-Next we can add translated content during the process of L10n, localisation. Here we translate the text that can be translated into different locales, depending on our needs.
+With i18n functionality in place, we can add translated content during the process of L10n, localisation. Here we translate the required text into different locales, depending on our needs.
 
-The third step is called quality assurance. When you have e.g. international tourists, the English translation should be easy to understand und doesn't need to comped with Shakespeare, cause your visitors might not speak the language that well.   You might also check, if translations are culturally appropriate for the given audience.
+The third step is called quality assurance, ensuring that the translations are easy to understand and culturally appropriate for the given audience.
 
 How can Silverstripe CMS help you with i18n? That's what we will learn in the next parts of this series.
