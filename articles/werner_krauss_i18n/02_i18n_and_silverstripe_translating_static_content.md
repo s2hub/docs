@@ -1,24 +1,24 @@
 # How to create multilingual sites in Silverstripe CMS
 Part 2 - i18n and Silverstripe CMS
 
-In the first part of this series we defined what i18n is and what parts of a software are affected by i18n. Today we will have a look at how Silverstripe CMS can help you with i18n and how you can translate static content in your webapp.
+In the first part of this series we defined what i18n is and what parts of a software project are affected by i18n. Today we will have a look at how Silverstripe CMS can help you with i18n and how you can translate static content in your webapp.
 
 ## i18n and Silverstripe CMS
 
-How can Silverstripe help you with i18n, which tools can you use for making webapps for the international market?
+How can Silverstripe help you with i18n and which tools can you use for making webapps for the international market?
 
-The core class for internationalisation is called - you guessed it -  `i18n`. That's where all logic for static translation in code and templates live, the methods `_t()` in PHP and `<%t` for templates.
+The core class for internationalisation is called - you guessed it -  `i18n`. That's where all logic for static translation in code and templates live.  The key methods are `_t()` in PHP and `<%t` for templates.
 
-It's called _static translation_, cause the translation is stored in code (your verson control system) and config variables and cannot be changed by editors. 
-That means, static translation is mainly affecting the user interface (e.g. texts like: 1 product added to the cart, contact me now, you are here...)
+It's called _static translation_, because the translation is stored in code (e.g. your version control system) and config variables and hence cannot be changed by CMS users. 
+Static translation usually is employed in areas of the code like the user interface (e.g. text like: "1 product added to the cart", "contact me now", "you are here", etc.)
 
-If you want to translate CMS content stored in your database, then a module called Fluent is your friend. Here you can define multiple locales and change the content for each locale in the CMS. That's called dynamic translation and will be part of the next article in this series. First things first...
+If you want to translate CMS content stored in your database, then a module called "Fluent" is your friend. Here you can define multiple locales and change the content for each locale in the CMS. That's called dynamic translation and will be part of the next article in this series.
 
 Of course Silverstripe CMS has some good [documentation about i18n in the developer guides](https://docs.silverstripe.org/en/5/developer_guides/i18n/).
 
-## The basics: class i18n
+## The basics: the i18n class
 
-Let's have a deeper look at the basic class `i18n`. It stores different data and keeps that data available for you and your code. First it stores the current locale you can set either globally or based on the URL of the current page. Then it contains the static `_t()` method for translating static properties in your PHP code and templates.
+Let's have a deeper look at the basic `i18n` class. It stores different data and keeps that data available for you and your code. It keeps track of the current locale, which can either be set globally or based on the URL of the current page. The class contains the static `_t()` method for translating static properties in your PHP code and templates.
 
 So, let's set the default locale of your webapp. You can do this in your config.yml:
 
@@ -35,9 +35,10 @@ i18n::set_locale('de_DE');
 ```
 
 
-What if you want to translate your own model classes? Then you can use the interface `i18nEntitiyProvider` for providing an array with all entities you want to translate in a standardised way: the singlular and plural names and rules for pluralisation (e.g. one tree, two trees, or in German "ein Baum, zwei Bäume").
+Many of the core classes in Silverstripe CMS have support for i18n already included, but what if you want to add some custom translations to your own model classes? 
+Then you can use the interface `i18nEntitiyProvider`, and provide an array with all entities you want to translate in a standardised way, including entities such as the singular and plural names and rules for pluralisation (e.g. one tree, two trees, or in German "ein Baum, zwei Bäume").
 
-That interface is mainly used by `DataObject` and can be overwritten in your subclasses. Most of the time all entities provided by `DataObject` are enough for your needs. But if you have to translate e.g. configuration arrays, this is a nice way to collect all items that need to be translated programmatically. The source code has a nice example for that:
+That interface is mainly used by `DataObject` and can be overwritten in your subclasses. Most of the time, the default entities provided by `DataObject` are enough for your needs. But if you have to translate e.g. configuration arrays, this is a nice way to collect all items that need to be translated programmatically. The source code has a nice example for that:
 
  ```php
 class MyTestClass implements i18nEntityProvider
@@ -61,7 +62,7 @@ So we have some entities we want to translate, but how is it actually done? Well
 
 ## The process of translating static content
 
-The `_t` method is used for translating static content, in both, PHP code and templates. You need to provide a translation key and a fallback translation, if your current locale doesn't have that key translated.
+The `_t` method is used for translating static content, in both, PHP code and templates. You need to provide a translation key and a fallback translation, (in case your current locale doesn't have that key translated).
 
 ```php
 _t(__CLASS__ . '.PageTitle', 'Item Title')
@@ -75,35 +76,36 @@ return $this->error(_t(__CLASS__ . '.ItemNotFound', 'Item not found.'));
 
 Note that Silverstripe defined a helper function for `SilverStripe\i18n\i18n::_t()`. You only need to use `_t()` in your code.
 
-`_t` can also replace placeholders in your translations, cause depending on the locale you want to add the number of items at the start, the beginning or the end of your translated text. The syntax for that is: 
+`_t` can also replace placeholders in your translation text, and you can specify the position of these for each locale. The syntax for that is: 
 
 ```php
 _t('MyObject.SomeKey', 'Added {count} items', [ 'count' => $count ]);
 ```
 
-You see, that the third parameter for `_t` is for passing the parameters to replace the placeholders with the strings provided. That's also possible in templates, though it doesn't look that common.
+The third parameter for `_t` is for passing the parameters to replace the placeholders with the strings provided. That's also possible in templates, although it's less common.
 
-One word on plurals... With the example above, you could also write a plural translation for the same key. The syntax for that is:
+One word on plurals... With the example above, you could also write a plural translation for the same key. The `_t` function will conditionally display the translated text, depending on the value of a variable.  The syntax for that is:
 
 ```php
 // Plurals are invoked via a `|` pipe-delimeter with a {count} argument
 _t('MyObject.SomeKey', 'Added an item|Added {count} items', [ 'count' => $count ]);
 ```
-You see, that `{count}` is only used for the plural version of the translation. 
+You see, that the string after the pipe, and the `{count}` placeholder is only used for the plural version of the translation. 
 
-I think it's a good practice to give English keys and fallback translations to your static content, even if you're working on a customer project. IMHO it's a good standard, that English is the source language in your code. You never know who will work at that project later and if they speak the same language as you do.
+_Tip: I think it's a good practice to give English keys and fallback translations to your static content, even if you're working on a customer project. IMHO it's a good standard that English is the source language in your code. You never know who will work at that project later and if they speak the same language as you do._
 
 ## Where are all those translations stored?
 
-Silverstripe CMS stores the translated values in yml-files follwing [Ruby's i18n convention](https://guides.rubyonrails.org/i18n.html#pluralization) in the _lang/_ folder of each module or in _app/lang_. This way they are part of your code, can be edited in your IDE and stored in your version control system. On `?flush`, Silverstripe checks the yml files and caches all translation in a faster cache. This means, you have to tell Silverstripe by flushing the cache if you've made changes in your yml translations.
+Silverstripe CMS stores the translated values in yml-files, following [Ruby's i18n convention](https://guides.rubyonrails.org/i18n.html#pluralization) in the _lang/_ folder of each module or in _app/lang_. This way they are part of your code, can be edited in your IDE and stored in your version control system. On `?flush`, Silverstripe checks the yml files and caches all translations for faster access. This means you have to force Silverstripe to update by flushing the cache if you've made changes in your yml translations.
 
 The translation for e.g. German is stored in _lang/de.yml_, if you need to overwrite some strings for Austrian de_AT, you can do this in _lang/de_AT.yml_. If a string isn't available in de_AT, the framework automatically falls back to de.yml. That's pretty handy, isn't it?
 
 ## Some sugar: default translations for DataObjects
 
-Silverstripe CMS is built for i18n and tries to help you as much as possible to make your work as easy as possible. You don't need to define e.g. translations in PHP for every field label from `$db`, `$has_one` etc, there is some syntactic sugar for you to use in your yml files:
+Silverstripe CMS is built for i18n and tries to help you as much as possible to make your work as easy as possible. 
+For example, you don't need to define translations in PHP for every field label from `$db`, `$has_one` etc.  There is some syntactic sugar for you to use in your yml files:
 
-SINGULARNAME, PLURALNAME and PLURALS for naming the DataObject. You can define this either in PHP or yml:
+SINGULARNAME, PLURALNAME and PLURALS for naming the DataObject can be defined either in PHP or yml:
 
 ```yaml
     MyDataObject:
@@ -125,7 +127,7 @@ If you use PHP, PLURALS are automatically generated by DataObject's provideI18nE
 
 
 
-Field labels and relation lables can be defined like `db_Title`, `has_one_Album` (when your relation is named Album), etc...
+Field labels and relation labels can be defined like `db_Title`, `has_one_Album` (when your relation is named Album), etc...
 There is no need to clutter the PHP  code with defining translations for field labels anymore. 
 
 ```yml
@@ -145,7 +147,7 @@ There is no need to clutter the PHP  code with defining translations for field l
     has_one_Member: Member
  ```
 
-This works for all db fields and relations, except `$belongs_to` and `$manymany_trough`.
+This works for all db fields and relations, except `$belongs_to` and `$many_many through`.
 
 Note: for every key you could also define plural forms like:
 ```yml
@@ -157,7 +159,9 @@ Address:
 
 ## Collecting all the translations from code and templates
 
-When you have all the static content in your code and Silverstripe templates translated, you can copy them over to your yml files. That's kind of a boring work to do, and therefore Silverstripe CMS helps you with this by providing the `I18nTextCollectorTask`. It screens all your PHP and .ss files for things to translate and writes it into the defined yml file.
+Ok, now we have all static text translated in PHP and the templates, we need to grab them all, so we have them in yml and can send them to our translator.
+
+With all the static content in your code and Silverstripe templates translated, you could manually copy them over to your yml files, but that's kind-of boring work!  Silverstripe CMS helps you with this by providing the `I18nTextCollectorTask`. It searches all your PHP and .ss files for things to translate and writes it into the defined yml file.
 
 You can run it by calling the task via URL or CLI, e.g. `https://myproject.local/dev/tasks/i18nTextCollectorTask`
 
@@ -167,19 +171,19 @@ And if you want to collect from one or more themes, you can run it like `https:/
 
 [//]: # (TODO: Still correct? A requirement for I18nTextCollectorTask is PHPUnit, which should be installed in your development environment.) 
 
-Ok, now we have all static text translated in PHP and the templates, now we need to grab them all so we have them in yml and can send them to our translator.
+
 
 ## How to fix missing translations in 3rd-party modules?
 
-Now that we know, that all the translations of static content are just strings in yml files, we know how to fix translations in 3rd-party modules in our project without forking the module.
+Since we know that all the translations of static content are just strings in yml files, we know how to fix and override translations in 3rd-party modules in our project.
 
-It's really easy, because language yml files in your app module overrule all module's language strings - similar to configurations in yml. Knowing that is the key to fix missing or incorrect translations in modules:
+It's really easy, because language yml files in your app module overrule all module's language strings - similar to configurations in yml.
 
 1. find the missing string in templates or code
 2. add or modify your language's yml file in _app/lang_
 3. flush caches, so Silverstripe CMS notices the new translation
 
-Of course, if you add translations or fix errors, please make a pull request and give your changes back to the community.
+Of course, if you add translations or fix errors, please make a pull request on the module and give your changes back to the community.
 
 ## How to translate (core) modules
 
