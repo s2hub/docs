@@ -64,7 +64,7 @@ The remaining directives help you to improve your code step by step with better 
 
 Running Rector on an old code base will change a lot. Too much for checking if everything is still right. So it's recommended that you change one thing at a time, commit the changes to git and then change the next thing. So first, you can comment out the Silverstripe sets and only update your code to PHP8.3. 
 
-### Step 3: Update Code In The Current Project As Much As Possible
+## Step 3: Update Code In The Current Project As Much As Possible
 
 Now let's run Rector the first time. Make sure that your last code changes are checked into git, so you can roll back at any time. You can now run
 
@@ -80,7 +80,7 @@ Then you can commit the changes, enable another Rector or setlist and repeat.
 
 As we're still on SS5, you might use the setlist `SilverstripeLevelSetList::UP_TO_SS_5_4`.
 
-### Step 4: Check And Update Dependencies In SS5
+## Step 4: Check And Update Dependencies In SS5
 ### Update modules
 Most Silverstripe projects use a lot of modules, some of them might be already updated, others not. So the next step is to check the required modules in your _composer.json_ for updates. I do this manually on packagist.
 
