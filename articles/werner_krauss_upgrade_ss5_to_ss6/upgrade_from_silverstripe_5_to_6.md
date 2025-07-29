@@ -160,4 +160,4 @@ Now that the module works fine, it's essential that you create a pull request on
 
 ## Conclusion
 
-The new major version 6 of our good ol' fiend Silverstripe CMS comes with a lot of changes, but there are tools that help us to update our code as much as possible. With rector, we can automate a lot of the upgrade task and get better code quality for free.
+The new major version 6 of our good ol' friend Silverstripe CMS comes with a lot of changes, but there are tools that help us to update our code as much as possible. With rector, we can automate a many parts of the upgrade task and get better code quality for free.
