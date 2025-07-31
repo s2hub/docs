@@ -1,7 +1,7 @@
 # Updating to Silverstripe 6
 In June 2025 Silverstripe 6 was released. A new major version, cool. Some cool new features and many small changes under the hood for an up-to-date codebase. 
 
-The most significant changes are that it bumped the minimum Version of PHP to 8.3 and many classes got renamed. So updating could be cumbersome? Not really. As many people face the problems of upgrading code, some clever guys invented Rector, a tool for upgrading PHP with defined and tested rules, so-called rectors. This can help us to e.g. rename classes automatically or to convert code to newer constructs, e.g. `match `instead of `switch`, `string_starts_with` instead of checking `str_pos`, etc...
+The most significant changes are that it bumped the minimum Version of PHP to 8.3 and many classes got renamed. So updating could be cumbersome? Not really. As many people face the problems of upgrading code, some clever folks invented Rector, a tool for upgrading PHP with defined and tested rules, so-called rectors. This can help us to e.g. rename classes automatically or to convert code to newer constructs, e.g. `match `instead of `switch`, `string_starts_with` instead of checking `str_pos`, etc...
 
 This document will lead you through the progress of upgrading a site from Silverstripe 5 to Silverstripe 6 and will explain the steps and tools I recommend for doing this task.
 
@@ -81,7 +81,10 @@ Then you can commit the changes, enable another Rector or setlist and repeat.
 As we're still on SS5, you might use the setlist `SilverstripeLevelSetList::UP_TO_SS_5_4`.
 
 ## Step 4: Check And Update Dependencies In SS5
-### Update modules
+
+Now that our project's code is improved and hopefully all deprecations are fixed (we'll rename classes in Step 4.2), we need to update composer's requirements when switching to Silverstripe's new major version.
+
+### Step 4.1: Update Modules
 Most Silverstripe projects use a lot of modules, some of them might be already updated, others not. So the next step is to check the required modules in your _composer.json_ for updates. I do this manually on packagist.
 
 
@@ -89,12 +92,12 @@ If a module doesn't have a SS6 compatible release, I also go to its GitHub page 
 
 Modules that are already compatible with SS6 can be updated, others need to be removed for now.
 
-### update your code with Rector to SS6, check for errors
+### Step 4.2: Update Your Code With Rector To SS6, Check For Errors
 So now that you installed SS6 to your project, running dev/build will throw a bunch of errors. That's the time to upgrade your code. Enable `SilverstripeLevelSetList::UP_TO_SS_6_0` in your _rector.php_ and run Rector.
 
  Once dev/build works, we're one step further, but still not done. Make sure your code works as expected and use tools for linting or static analysis to find errors in your code and raise its quality.
 
-Note: build tasks have massive changes, and I don't have (yet) Rector rules for them.
+Note: build tasks have massive changes, and I don't have (yet) Rector rules for them. As Tasks are now full Symfony CLI scripts, you need to spend some time to think about input parameters etc.
 
 ## Step 5: Update Missing Modules Yourself
 
@@ -157,6 +160,7 @@ Now that the module works fine, it's essential that you create a pull request on
 ## What's Next?
 * Test your code<br>Of course, you already have unit tests that can guarantee everything works as expected.
 * Add more code quality tools like linting or static analysis. <br>This annoys a lot in the beginning, but once you're through the first frustrations, those tools help you find buggy code more easily. It's really worth the work!
+* If you find some recurring changes while updating, feel free to raise an issue or create your own Rector and submit a PR to _silverstripe-rector_.
 
 ## Conclusion
 
